@@ -126,6 +126,9 @@ public class SimpleCalculation {
         int length=0;
         for(int i=0;i<string.length();i++){
             char charat=string.charAt(i);
+			if(i==0&&charat=='-'){
+				length++;
+			}
             if(charat=='0'||charat=='1'||charat=='2'||charat=='3'||charat=='4'||charat=='5'||charat=='6'||charat=='7'||charat=='8'||charat=='9'||charat=='/'||charat==' '||charat=='.'){
                 length++;
             }
