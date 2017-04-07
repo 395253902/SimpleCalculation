@@ -13,11 +13,14 @@ public class SimpleCalculation {
     private int maxcommom=1;           //变量maxcommom 用来存储最大公约数
     private double trueProbability=0;//变量trueProbabity用来存储正确率
     private List<String> Formula=new ArrayList<String>();
+    final int RandomRangeMax = 99;
+    final int RandomRangeMin = 60;
     public SimpleCalculation(){
 
     }
-
-    void ojld(int num1,int num2){                                           //欧几里得算法求最大公约数
+    //欧几里得算法求最大公约数
+    void ojld(int num1,int num2){
+        this.maxcommom=1;
         num1=Math.abs(num1);
         num2=Math.abs(num2);
         if(num2>num1){
@@ -41,23 +44,43 @@ public class SimpleCalculation {
 
             case 1:                                                     //随机一个整数
                 int num;
-                num = (int) (Math.random() * 99) + 1;
+                num = (int) (Math.random() * RandomRangeMax) + 1;
                 number[0] = String.valueOf(num);
                 number[1] = "ZS";
                 break;
             default:                                                    //随机一个分数
-                int one1 = (int) (Math.random() * 60) + 1;
-                int one2 = (int) (Math.random() * (99 - one1)) + one1 + 1;
+                int one1 = (int) (Math.random() * RandomRangeMin) + 1;
+                int one2 = (int) (Math.random() * (RandomRangeMax - one1)) + one1 + 1;
                 number[0] = String.valueOf(one1) + "/" + String.valueOf(one2);
                 number[1] = "FS";
                 break;
         }
         return number;
     }
+    String [] Simplification(String []num){
+        String [] str_split;
+        if(num[1].equals("FS")){
+             str_split= num[0].split("/");
+             ojld(Integer.parseInt(str_split[0]),Integer.parseInt(str_split[1]));
+        }else{
+            return num;
+        }
+        if(Integer.parseInt(str_split[1])/this.maxcommom!=1){
+            num[0]=String.valueOf(Integer.parseInt(str_split[0])/this.maxcommom+"/"+Integer.parseInt(str_split[1])/this.maxcommom);
+        }
+        //如果除以最大公约数后分母为1 则输出整数
+        else{
+            num[0]=String.valueOf(Integer.parseInt(str_split[0])/this.maxcommom);
+            num[1]="ZS";
+        }
+        return num;
+    }
     void Test(){
 
         String num1[]=randomnum();
         String num2[]=randomnum();
+        num1=Simplification(num1);
+        num2=Simplification(num2);
         int switchnum=(int)(Math.random()*4)+1;
         switch (switchnum){
             case 1:
@@ -67,7 +90,7 @@ public class SimpleCalculation {
                 System.out.println(num1[0]+" - "+num2[0]+"=");
                 break;
             case 3:
-                System.out.println(num1[0]+" * "+num2[0]+"=");
+                System.out.println(num1[0]+" × "+num2[0]+"=");
                 break;
             case 4:
                 System.out.println(num1[0]+" ÷ "+num2[0]+"=");
@@ -139,6 +162,7 @@ public class SimpleCalculation {
             return false;
         }
     }
+    //两个数的运算
     void calculation(String []num1,String [] num2,int yunsf) {
         Scanner strin=new Scanner(System.in);
         String result="";
@@ -174,7 +198,7 @@ public class SimpleCalculation {
             //运用欧几里得算法求最大公约数
             ojld(Integer.parseInt(res[0]),Integer.parseInt(res[1]));
 
-            //如果除以最大公约数后分母不唯1 则输出分数
+            //如果除以最大公约数后分母不为1 则输出分数
             if(Integer.parseInt(res[1])/this.maxcommom!=1){
                 result=String.valueOf(Integer.parseInt(res[0])/this.maxcommom+"/"+Integer.parseInt(res[1])/this.maxcommom);
             }
@@ -294,6 +318,7 @@ public class SimpleCalculation {
                             }
                             //输入的分数合法对答案进行比较
                             else {
+                                strinput=strinput.replace(" ","");
                                 if (strinput.equals(result)) {
                                     System.out.println("正确！");
                                     this.T += 1;
